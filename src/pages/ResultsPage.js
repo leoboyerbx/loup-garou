@@ -12,8 +12,8 @@ const ResultsPage = () => {
     return <div>Oops... La phase est {game.phase}</div>;
   }
 
-  const isFinished = true;
-  game.users.forEach( 
+  let isFinished = true;
+  game.users.forEach(
     (user) => {
       if (user.vote === "" && user.isAlive) {
         isFinished = false;
@@ -25,9 +25,9 @@ const ResultsPage = () => {
     return <div>En attente de tous les joueurs</div>;
   }
 
-  // TODO add results 
+  // TODO add results
   return (
-  <div> 
+  <div>
     C'est [...] qui est mort !
   </div>
   );

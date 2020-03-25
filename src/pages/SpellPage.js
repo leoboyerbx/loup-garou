@@ -4,13 +4,13 @@ import { useSession } from '../services/User';
 import Button from '../components/Button';
 
 
-const CastPage = (props) => {
+const SpellPage = (props) => {
   const { user } = useSession();
   const { history } = useHistory();
-  
+
   if (user.persona !== "wizard") {
     history.push("/wait");
-    
+
   }
   return (<div>
     <Button>Tuer un joueur TODO only once</Button>
@@ -21,4 +21,4 @@ const CastPage = (props) => {
     </div>);
 }
 
-export default CastPage;
+export default SpellPage;

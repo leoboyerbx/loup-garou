@@ -18,31 +18,33 @@ Au cas où vous avez un trou de mémoire sur Sass, voici un [rappel de la syntax
 
 Je vous invite à regarder la vidéo de [Human Talks Paris](https://www.youtube.com/watch?v=D3tB_DGgICE).
 
-
 Quelques petites questions :
 
 - Résumer en une phrase l'intérêt de Material UI
-    - Cela permet d'avoir un ensemble de composants déjà conçus, et cohérents graphiquement, et ergonomiquement. On évite de "réinventer la roue" à chaque projet.
+  - Cela permet d'avoir un ensemble de composants déjà conçus, et cohérents graphiquement, et ergonomiquement. On évite de "réinventer la roue" à chaque projet.
 - Comment importer `material-ui` dans un fichier ?
-    - On utilise cette instruction pour importer un bouton par exemple: 
+  - On utilise cette instruction pour importer un bouton par exemple: 
+    
     ```javascript
     import { Button } from '@material-ui/core';
     ```
 - Comment une application peut utiliser un thème à travers l'ensemble d'un projet ?
-    - On Utilise le `MuiThemeProvider`:  on encapsule notre app dans ce component
+  - On Utilise le `MuiThemeProvider`:  on encapsule notre app dans ce component
 - A quoi sert `createMuiTheme` ?
-    - Elle genère un thème utilisable avec le `MuiThemeProvider`
+  - Elle genère un thème utilisable avec le `MuiThemeProvider`
 - A quoi correspond `palette` ?
-    - Elle décrit l'ensemble des couleurs utilisées par l'application
+  - Elle décrit l'ensemble des couleurs utilisées par l'application
 - Comment re-définir des propriétés ?
-    - Via la clef override
+  - Via la clef override
 - A quoi vous fait penser `withStyle` ? Comment l'utiliser ?
-    - Cela fait penser à un HOC pour encapsuler un component dans un Consumer. On l'utilise au moment d'exporter le component (ici `App`)
+  - Cela fait penser à un HOC pour encapsuler un component dans un Consumer. On l'utilise au moment d'exporter le component (ici `App`)
 - Reproduire les deux boutons rouge et bleu présentées dans la vidéo.
-```javascript
-import React from 'react';
-import { Button, MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core'
-import { blue } from '@material-ui/core/colors';
+  
+  ```javascript
+  import React from 'react';
+  import { Button, MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core'
+  import { blue } from '@material-ui/core/colors';
+  ```
 
 function App(props) {
   return (
@@ -81,7 +83,6 @@ const theme = createMuiTheme({
   }
 })
 
-
 export default withStyles(styles)(App);
 
 ```
@@ -94,27 +95,30 @@ De la même manière, voici une [vidéo](https://www.youtube.com/watch?v=mS0UKNB
 Quelques petites questions :
 
 - Qu'est-ce que le CSS-in-JS ?
-	- C'est un procédé qui permet de générer le CSS directement depuis le JS.
+    - C'est un procédé qui permet de générer le CSS directement depuis le JS.
 - Qu'est-ce que sont les tagged templates (délimitées par des backticks) ?
-	- C'est un moyen plus simmple d'écrire des propriétés:
+    - C'est un moyen plus simmple d'écrire des propriétés:
 - Donner un exemple d'un bouton personnalisé avec et sans les tagged templates ?
 
 Sans:
 ```javascript
 const Button = styles.button(["color: red"])
 ```
+
 Avec:
+
 ```javascript
 const Button = styled.button`
-	color: red;
+    color: red;
 `
 ```
 
 - Comment utilise-t-on les props dans cette librarie ?
-	- Les props reconnues par styledcomponent sonyt passées au DOM de manière transparente. On peut aussi utiliser les props pour faire du style conditionnel, en fonction des props.
+  - Les props reconnues par styledcomponent sonyt passées au DOM de manière transparente. On peut aussi utiliser les props pour faire du style conditionnel, en fonction des props.
 - Reprendre l'exemple du Material UI avec styled-components; l'écrire avec la composition et avec l'héritage.
 
 Composition:
+
 ```javascript
 import React from 'react';
 import styled from 'styled-components'
@@ -147,21 +151,50 @@ function App(props) {
   );
 }
 
-
-
-
 export default (App);
-
 ```
 
 Héritage:
-```javascript
 
+```javascript
+import React from 'react';
+import styled from 'styled-components'
+
+const commonstyles = `
+border-radius: 3px;
+cursor: pointer;
+padding: 8px 16px;
+border: none;
+`
+
+const ButtonBlue = styled.button`
+border-radius: 3px;
+cursor: pointer;
+padding: 8px 16px;
+border: none;
+
+  background-color: lightskyblue;
+`
+
+const ButtonGreen = styled(ButtonBlue)`
+background-color: green
+`
+
+function App(props) {
+  return (
+    <div>
+      <ButtonBlue>Bonjour</ButtonBlue>
+      <ButtonGreen>Ça va ?</ButtonGreen>
+    </div>
+  );
+}
+
+
+export default (App);
 ```
 
 - Quelles sont les fonctions du contexte de styled-components ?
-	- Les fonctions de contexte de styled permettent de gérer un thème.
-
+  - Les fonctions de contexte de styled permettent de gérer un thème.
 
 ## Mise en place du design
 
@@ -182,12 +215,85 @@ Activer l'authentification anonyme dans la console de Firebase.
 ### Découverte du code
 
 - Le code utilise des fonctions plutôt que des classes. Ecrire un bouton sous la forme d'une classe et d'une fonction. Retrouver les équivalences entre les méthodes des composants (telles que setState) et celles des fonctions ?
+
+Bouton Classe:
+
+```javascript
+class Button extends React.Component {
+  renter {
+    const { onClick, children } = this.props;
+    return (<button onClick={onClick}> { children }</button>);
+  }
+}
+```
+
+Bouton Function:
+
+```javascript
+const Button = (props) => {
+  const { onClick, children } = props;
+  return (<button onClick={onClick}> { children }</button>);
+}
+```
+
+Pour utiliser le state, au lieu d'utiliser `setState` on utilise les hooks:
+
+```javascript
+const [val, setVal] = React.useState(false)
+```
+
+A la place de setState on va utiliser la fonciton setVal définie ici.
+
+Pour les fonctions `ComponentDidMount` et `Component DidUpdate`, on utilise la fonction useEffect:
+
+```javascript
+React.useEffect(() => {
+    // contenu de componentDidMount
+})
+```
+
+Si on veut que la fonction soit appelée uniquement sur componentDidMount et pas componentDidUpdate, on passe un tableau vide en deuxième paramètre:
+
+```javascript
+React.useEffect(() => {
+ // contenu de componentDidMount
+}, [])
+```
+
+
+
 - Comment récupérer les props dans une fonction ?
+
+On spécifie les props en paramètre de la fonction pour y accéder.
+
 - Dans `App.js`, identifier les différents producteurs de données. Retrouver leur définition. Quelles données partagent-ils à l'ensemble de l'application ?
+  - BrowserRouter: Ce provider partage les fonctions de routage utilisées dans les Routes.
+  - UserProvider: Permet à l'application d'accéder aux informations sur l'utilisateur actuellement connecté.
+  - MasterGameProvider: Fournit les fonctions pour créer une partie et accéder aux calculs effectués par le Game Master virtuel.
+  - GameProvider: fournit les fonctions pour les éléments essentials du jeu.
+
 - Identifier les différentes pages de l'application. Décrire à l'aide d'une phrase le rôle de chacune d'entre elles.
+  - Alivepage:  La page qui s'affiche quand onest vivant et que ce n'est pas notre tour
+  - CastPage: La page pour voter
+  - CodePage: La page pour rejoindre une partie
+  - CreatePage: La page pour créer une partie
+  - DeadPage: La page qui s'affiche quand on est mort
+  - EndPage: Fin de partie, affiche les gagnants
+  - NightPage: S'affiche pendant la nuit
+  - ResultsPage: Les résultats du vote
+  - SpellPage: La page pour que la sorcière choisisse ce qu'elle fait
+  - StartPage: La page d'accueil
 - Pourquoi voit-on sur plusieurs pages "Chargement du master game en cours" ?
+
+Parce que ces pages utilisent le provider MasterGame mais comme la partie n'a pas démarré, il affiche un chargement
+
 - Avec les classes, nous utilisions `withMyContext` pour s'inscrire aux données d'un provider. Identifier dans services/Game.js la fonction qui joue désormais ce rôle.
-- Dans `CodePage`, rappeler comment un formulaire gère les champs de remplissage des données.o
+  
+  - C'est la fonction `useGame`
+
+- Dans `CodePage`, rappeler comment un formulaire gère les champs de remplissage des données.
+  
+  - À chaque modification de la valeur, on stocke la nouvelle valeur dans le state. AU moment du submit, on recupère la valeur stockée dans le state.
 
 ### Reprise du design
 
@@ -196,7 +302,6 @@ Activer l'authentification anonyme dans la console de Firebase.
 - Ajouter un header et un footer sur toutes les pages de l'application. 
 - Réaliser le design du formulaire de de `CodePage`, utilisé pour rejoindre l'application.
 - Faire de même avec `CreatePage`.
-
 
 ### Utilisation de Firebase
 
@@ -218,4 +323,3 @@ Activer l'authentification anonyme dans la console de Firebase.
 ### Rapport
 
 Rédiger un court rapport -- inférieur à une page, expliquant les modifications apportées au projet. Motiver ses choix. Expliquer les difficultés rencontrées.
-
