@@ -21,32 +21,43 @@ Je vous invite à regarder la vidéo de [Human Talks Paris](https://www.youtube.
 Quelques petites questions :
 
 - Résumer en une phrase l'intérêt de Material UI
+  
   - Cela permet d'avoir un ensemble de composants déjà conçus, et cohérents graphiquement, et ergonomiquement. On évite de "réinventer la roue" à chaque projet.
+
 - Comment importer `material-ui` dans un fichier ?
+  
   - On utilise cette instruction pour importer un bouton par exemple: 
     
     ```javascript
     import { Button } from '@material-ui/core';
     ```
+
 - Comment une application peut utiliser un thème à travers l'ensemble d'un projet ?
-  - On Utilise le `MuiThemeProvider`:  on encapsule notre app dans ce component
-- A quoi sert `createMuiTheme` ?
-  - Elle genère un thème utilisable avec le `MuiThemeProvider`
-- A quoi correspond `palette` ?
-  - Elle décrit l'ensemble des couleurs utilisées par l'application
-- Comment re-définir des propriétés ?
-  - Via la clef override
-- A quoi vous fait penser `withStyle` ? Comment l'utiliser ?
-  - Cela fait penser à un HOC pour encapsuler un component dans un Consumer. On l'utilise au moment d'exporter le component (ici `App`)
-- Reproduire les deux boutons rouge et bleu présentées dans la vidéo.
   
-  ```javascript
+  - On Utilise le `MuiThemeProvider`:  on encapsule notre app dans ce component
+
+- A quoi sert `createMuiTheme` ?
+  
+  - Elle genère un thème utilisable avec le `MuiThemeProvider`
+
+- A quoi correspond `palette` ?
+  
+  - Elle décrit l'ensemble des couleurs utilisées par l'application
+
+- Comment re-définir des propriétés ?
+  
+  - Via la clef override
+
+- A quoi vous fait penser `withStyle` ? Comment l'utiliser ?
+  
+  - Cela fait penser à un HOC pour encapsuler un component dans un Consumer. On l'utilise au moment d'exporter le component (ici `App`)
+
+- Reproduire les deux boutons rouge et bleu présentées dans la vidéo.
+```javascript
   import React from 'react';
   import { Button, MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core'
   import { blue } from '@material-ui/core/colors';
-  ```
-
-function App(props) {
+  function App(props) {
   return (
     <MuiThemeProvider theme={ theme }>
       <div>
@@ -54,9 +65,8 @@ function App(props) {
         <Button>Ça va ?</Button>
       </div>
     </MuiThemeProvider>
-  );
-}
-
+  )
+  }
 const styles = {
   myLeftButton: {
     backgroundColor: 'blue'
@@ -82,9 +92,7 @@ const theme = createMuiTheme({
     }
   }
 })
-
 export default withStyles(styles)(App);
-
 ```
 
 
@@ -260,19 +268,19 @@ React.useEffect(() => {
 }, [])
 ```
 
-
-
 - Comment récupérer les props dans une fonction ?
 
 On spécifie les props en paramètre de la fonction pour y accéder.
 
 - Dans `App.js`, identifier les différents producteurs de données. Retrouver leur définition. Quelles données partagent-ils à l'ensemble de l'application ?
+  
   - BrowserRouter: Ce provider partage les fonctions de routage utilisées dans les Routes.
   - UserProvider: Permet à l'application d'accéder aux informations sur l'utilisateur actuellement connecté.
   - MasterGameProvider: Fournit les fonctions pour créer une partie et accéder aux calculs effectués par le Game Master virtuel.
   - GameProvider: fournit les fonctions pour les éléments essentials du jeu.
 
 - Identifier les différentes pages de l'application. Décrire à l'aide d'une phrase le rôle de chacune d'entre elles.
+  
   - Alivepage:  La page qui s'affiche quand onest vivant et que ce n'est pas notre tour
   - CastPage: La page pour voter
   - CodePage: La page pour rejoindre une partie
@@ -283,6 +291,7 @@ On spécifie les props en paramètre de la fonction pour y accéder.
   - ResultsPage: Les résultats du vote
   - SpellPage: La page pour que la sorcière choisisse ce qu'elle fait
   - StartPage: La page d'accueil
+
 - Pourquoi voit-on sur plusieurs pages "Chargement du master game en cours" ?
 
 Parce que ces pages utilisent le provider MasterGame mais comme la partie n'a pas démarré, il affiche un chargement
@@ -306,11 +315,31 @@ Parce que ces pages utilisent le provider MasterGame mais comme la partie n'a pa
 ### Utilisation de Firebase
 
 - Dans 'User.js', comment fait-on pour garder une trace persistente de l'application, même lorsqu'on rafraichit la page ? Comment reconnait-on l'utilisateur lorsqu'il revient dans l'application ?
+
+On utilise l'objet Auth fourni par FireBase: il permet de garder en mémoire l'utilisateur connecté en lui passant un cookie. La fonction `useSession()` renvoie un context qui fournit l'objet utilisateur connecté à Firebase. La persistence de la session et l'authentification sont gérées par Firebase, ce qui nous évie d'avoir à gérer cela nous-même et nous affranchit de la nécessité d'avoir un backend.
+
 - Dans Firebase, nous ne pouvons pas ajouter des champs à un utilisateur. Par conséquent, nous devons créer une collection d'utilisateurs et synchroniser les utilisateurs avec cette table. Expliquer où est-ce que cette synchronisation a lieu.
+
+Cette synchronisation a lieu dans `useUser`. On récupère l'objet utilisateur connecté, et après on associe l'id unique de l'utilisateur avec un document présent dans le firestore. Si ce document n'existe pas déjà, il est créé.
+
 - A votre avis, à quoi sert useEffect ?
+
+UseEffect permet d'effectuer des actions de manière asynchrone: dans notre cas le contact de FireBase peut prendre du temps donc on utilise useEffect. Cela permet d'effectuer ces actions sans qu'elles bloquent le rendu des components. L'utilisateur ne verra pas une page blanche, mais l'interface apparaît vide, puis se remplit, ce qui permet de rende l'expérience utilisateur plsu fluide.
+
 - A quoi sert la fonction `unsubscribe` utilisée dans les `useEffect` de `User.js` ?
+
+Unsubscribe permet d'arrêter d'attendre des muses à jour de la part de firebase. La ofnction est appelée une fois les actions présentes dans le useEffect sont terminées.
+
 - Décrire les trois valeurs de retour de `UseUser`.
+
+	- `error`: Contient les informations sur l'erreur si une erreur s'est produite
+	- `loading`: Indique si les informations sont encore en cours de chargement ou non
+	-  `user`: l'objet user
+
 - Combien de collections dans Firebase pouvez-vous identifier ? A quoi correspondent les `doc` ?
+
+	- Dans Firebase on identifie 2 collections: les utilisateurs dans 'users' et les parties dans 'game'
+	- Un document correspond à une entrée dans la collection: on aura un document par utilisateur stocké et un document par partie.
 
 ### Contribuer à l'application
 
@@ -323,3 +352,6 @@ Parce que ces pages utilisent le provider MasterGame mais comme la partie n'a pa
 ### Rapport
 
 Rédiger un court rapport -- inférieur à une page, expliquant les modifications apportées au projet. Motiver ses choix. Expliquer les difficultés rencontrées.
+
+Mes modifs:
+ - Ajout de fontawesome

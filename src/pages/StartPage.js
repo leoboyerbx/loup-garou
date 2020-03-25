@@ -8,17 +8,24 @@ import Button from "../components/Button";
 const Start = () => {
   const { user } = useSession();
   return (
-    <div>
-      <Link to="/create" onClick={() => createGame(user)}><Button primary>Nouvelle partie</Button>
+    <div style={styles.container}>
+      <Link to="/create" onClick={() => createGame(user)}><Button style={styles.spacedButton}>Nouvelle partie</Button>
       </Link>
       <br />
       <Link to="/join">
-        <Button>
-          Rejoindre une partie
-        </Button>
+        <Button style={styles.spacedButton}>Rejoindre une partie</Button>
       </Link>
     </div>
   );
+}
+
+const styles = {
+  container: {
+    textAlign: 'center'
+  },
+  spacedButton: {
+    margin: 10
+  }
 }
 
 export default Start;

@@ -2,7 +2,17 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import Button from '../components/Button';
 import { useMasterGame, addPlayer } from '../services/MasterGame';
+import styled from "styled-components";
+import Input from "../components/Input";
 
+const CodeText = styled.p`
+  width: 100%;
+  display: block;
+  font-size: 3em;
+  color: #888;
+  font-weight:bold;
+  text-align: center;
+`
 
 const AddPlayerForm = () => {
   const [value, setValue] = useState('');
@@ -19,13 +29,13 @@ const AddPlayerForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <Input
         type="text"
         name="name"
         placeholder="Ajouter le nom d'un joueur..."
         onChange={e => setValue(e.target.value)}
       />
-      <button>+</button>
+      <Button>+</Button>
     </form>
   );
 };
@@ -36,7 +46,9 @@ const CreatePage = (props) => {
 
   return (
     <div>
-      <h1>Vos amis peuvent se connecter avec le code {game.code}</h1>
+      <p>Identifiant de la partie :</p>
+      <CodeText>{game.code}</CodeText>
+      <h1>Vos amis peuvent se connecter avec ce code.</h1>
       <div>
         {players.map((player, index) => (
           <div key={index}>
