@@ -332,7 +332,7 @@ Unsubscribe permet d'arrêter d'attendre des muses à jour de la part de firebas
 
 - Décrire les trois valeurs de retour de `UseUser`.
 
-	- `error`: Contient les informations sur l'erreur si une erreur s'est produite
+	- `error`: Bool qui indique si il y a une erreur
 	- `loading`: Indique si les informations sont encore en cours de chargement ou non
 	-  `user`: l'objet user
 
